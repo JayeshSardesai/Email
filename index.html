@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Campus Map</title>
-        <style>
+  <head>
+    <title>Campus Map</title>
+    <style>
     #map {
       height: 500px;
       width: 100%;
     }
   </style>
-    </head>
-    <body>
-        <h2>Campus Map with Your Location and Nearby Places</h2>
-        <div id="map"></div>
+  </head>
+  <body>
+    <h2>Campus Map with Your Location and Nearby Places</h2>
+    <div id="map"></div>
 
-        <script>
+    <script>
     function initMap() {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function (position) {
@@ -48,18 +48,18 @@
           const places = [
             {
               name: "Mechanical Engineering Department",
-              lat: 12.9243224,
-              lng: 77.5003441
+              lat: 15.4122845,
+              lng: 75.6371228
             },
             {
               name: "Canteen",
-              lat: 12.9234332,
-              lng: 77.5001758
+              lat:15.4133599,
+              lng: 75.6372156
             },
             {
               name: "Library",
-              lat: 12.9222846,
-              lng: 77.4989805
+              lat: 15.4131802,
+              lng: 75.6381490
             }
           ];
 
@@ -91,9 +91,9 @@
     }
   </script>
 
-        <!-- Replace with your actual API key -->
-        <script async defer
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCwAIaBvSNYwe8i4szx0NDx9OBCyaRr97E&callback=initMap">
+    <!-- Replace with your actual API key -->
+    <script async defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCwAIaBvSNYwe8i4szx0NDx9OBCyaRr97E&callback=initMap">
   </script>
-    </body>
+  </body>
 </html>
