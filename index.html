@@ -125,9 +125,8 @@
               handleLocationError(true, error.message);
             },
             {
-              enableHighAccuracy: true,
-              timeout: 10000,
-              maximumAge: 0
+              enableHighAccuracy: true
+              // timeout and maximumAge removed
             }
           );
         } else {
@@ -143,7 +142,7 @@
       }
     </script>
 
-    <!-- Google Maps API (Replace with your API key) -->
+    <!-- Google Maps API (Replace with your actual API key) -->
     <script
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCwAIaBvSNYwe8i4szx0NDx9OBCyaRr97E&callback=initMap"
       async defer>
