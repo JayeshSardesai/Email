@@ -1,23 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title>Campus Map</title>
-        <style>
+  <head>
+    <title>Campus Map</title>
+    <style>
+      body {
+        margin: 0;
+        background-color: #e0e0e0; /* Gray background */
+        font-family: Arial, sans-serif;
+      }
       #map {
         height: 500px;
         width: 100%;
       }
       #info {
         padding: 10px;
+        background: #fff;
+        border-bottom: 1px solid #ccc;
+      }
+      h2 {
+        text-align: center;
+        padding: 15px;
       }
     </style>
-    </head>
-    <body>
-        <h2>Campus Map with Your Location and Nearby Places</h2>
-        <div id="info">Fetching location...</div>
-        <div id="map"></div>
+  </head>
+  <body>
+    <h2>Campus Map with Your Location and Nearby Places</h2>
+    <div id="info">Fetching location...</div>
+    <div id="map"></div>
 
-        <script>
+    <script>
       let map;
       let infoWindow;
 
@@ -54,7 +65,7 @@
                 infoWindow.open(map, userMarker);
               });
 
-              // Campus locations
+              // Nearby campus locations
               const places = [
                 {
                   name: "Mechanical Engineering Department",
@@ -85,6 +96,30 @@
                   infoWindow.open(map, marker);
                 });
               });
+
+              // Draw path to Library
+              const library = places.find(p => p.name === "Library");
+
+              const directionsService = new google.maps.DirectionsService();
+              const directionsRenderer = new google.maps.DirectionsRenderer({
+                suppressMarkers: true
+              });
+              directionsRenderer.setMap(map);
+
+              directionsService.route(
+                {
+                  origin: userLocation,
+                  destination: { lat: library.lat, lng: library.lng },
+                  travelMode: google.maps.TravelMode.WALKING
+                },
+                (response, status) => {
+                  if (status === "OK") {
+                    directionsRenderer.setDirections(response);
+                  } else {
+                    console.error("Directions request failed due to " + status);
+                  }
+                }
+              );
             },
             function (error) {
               handleLocationError(true, error.message);
@@ -108,9 +143,10 @@
       }
     </script>
 
-        <!-- Google Maps API (Replace with your actual API key) -->
-        <script async defer
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCwAIaBvSNYwe8i4szx0NDx9OBCyaRr97E&callback=initMap">
+    <!-- Google Maps API (Replace with your API key) -->
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCwAIaBvSNYwe8i4szx0NDx9OBCyaRr97E&callback=initMap"
+      async defer>
     </script>
-    </body>
+  </body>
 </html>
