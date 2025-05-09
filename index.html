@@ -5,7 +5,7 @@
     <style>
       body {
         margin: 0;
-        background-color: #e0e0e0; /* Gray background */
+        background-color: #e0e0e0;
         font-family: Arial, sans-serif;
       }
       #map {
@@ -24,7 +24,7 @@
     </style>
   </head>
   <body>
-    <h2>Campus Map with Your Location and Nearby Places</h2>
+    <h2>Campus Map with Your Location and Paths to Nearby Places</h2>
     <div id="info">Fetching location...</div>
     <div id="map"></div>
 
@@ -65,7 +65,6 @@
                 infoWindow.open(map, userMarker);
               });
 
-              // Nearby campus locations
               const places = [
                 {
                   name: "Mechanical Engineering Department",
@@ -84,7 +83,11 @@
                 }
               ];
 
-              places.forEach(place => {
+              // Create directions service once
+              const directionsService = new google.maps.DirectionsService();
+
+              // Draw paths to each location
+              places.forEach((place, index) => {
                 const marker = new google.maps.Marker({
                   position: { lat: place.lat, lng: place.lng },
                   map: map,
@@ -95,38 +98,39 @@
                   infoWindow.setContent(place.name);
                   infoWindow.open(map, marker);
                 });
-              });
 
-              // Draw path to Library
-              const library = places.find(p => p.name === "Library");
-
-              const directionsService = new google.maps.DirectionsService();
-              const directionsRenderer = new google.maps.DirectionsRenderer({
-                suppressMarkers: true
-              });
-              directionsRenderer.setMap(map);
-
-              directionsService.route(
-                {
-                  origin: userLocation,
-                  destination: { lat: library.lat, lng: library.lng },
-                  travelMode: google.maps.TravelMode.WALKING
-                },
-                (response, status) => {
-                  if (status === "OK") {
-                    directionsRenderer.setDirections(response);
-                  } else {
-                    console.error("Directions request failed due to " + status);
+                const directionsRenderer = new google.maps.DirectionsRenderer({
+                  suppressMarkers: true,
+                  preserveViewport: true,
+                  polylineOptions: {
+                    strokeColor: ["#ff0000", "#00aa00", "#0000ff"][index % 3],
+                    strokeOpacity: 0.7,
+                    strokeWeight: 4
                   }
-                }
-              );
+                });
+                directionsRenderer.setMap(map);
+
+                directionsService.route(
+                  {
+                    origin: userLocation,
+                    destination: { lat: place.lat, lng: place.lng },
+                    travelMode: google.maps.TravelMode.WALKING
+                  },
+                  (response, status) => {
+                    if (status === "OK") {
+                      directionsRenderer.setDirections(response);
+                    } else {
+                      console.error("Directions request failed due to " + status);
+                    }
+                  }
+                );
+              });
             },
             function (error) {
               handleLocationError(true, error.message);
             },
             {
               enableHighAccuracy: true
-              // timeout and maximumAge removed
             }
           );
         } else {
